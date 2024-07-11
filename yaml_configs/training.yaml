@@ -1,0 +1,51 @@
+simulation_config:
+  epsilon_setting: "fixed"
+  epsilon_type: "continuous"
+  explore_mode: "Normal"
+  initialization_rejection_sampling_flag: False
+  gui_flag: False
+  map: "3Lane"
+  neuralmetric_flag: True
+  neuralmetric_config:
+    experiment_name: "3_model_0s_before_unavoidable_split_pos_neg_newnormalize"
+    dataset: "neuralmetric_iter1/unavoidablebefore05s/splitdata_newnormalize"
+    label: "Random sample 3 model 0s before unavoidable"
+    validation_data_path: "neuralmetric_iter1/unavoidablebefore05s/"
+    load_dataset_method: "split_pos_neg"
+    validation_save_result_root_path: "neuralmetric_iter1/unavoidablebefore05s"
+    loss_func: "BCE"
+    batch_size: 128
+    max_num_epochs: 4000
+    lr: 0.005
+    model: 'bn_mlp_sigmoid'
+    DSL_mode: "baseline"
+    layer_num: 1
+    num_workers: 0
+    ckpt: "./agents/NeuralMetric/best_ckpt.pt"
+    obs_normalize: True
+    input_dim: 27
+  pytorch_model_path_list:
+    - "./agents/AV/basemodel_ckpt369.pt"
+  pytorch_nade_model_path: "./agents/ITE/nademodel099_cp927.pt"
+  safetyguard_flag: True
+  speed_mode: "high_speed"
+
+experiment_config:
+  AV_model: "RLNew"
+  code_root_folder: "."
+  data_folder: 
+    - "/path/to/training/data/folder" # please set this variable to be the path of the training data folder
+  episode_num: 20000
+  ep_num_eval_worker: 100 # please set this variable to be the number of iterations for the evaluation process
+  eval_three_circle_min_distance_threshold: 2.5
+  experiment_name: "training" # please set this variable to be any experiment name you want
+  lr: 0.00001
+  log_mode: "all"
+  mode: "DRL_train"
+  number_eval_workers: 200 # please set this variable to be the number of cpu for evaluating the latest agent after one iteration of training
+  num_workers: 179 # please set this variable to be the number of cpu for collecting the training batches
+  ray_mode: "local"
+  restore_path: "/path/to/source/code/agents/AV/checkpoint_000369/checkpoint-369" # please set this variable to be the path of the checkpoint you want to initialize from
+  root_folder: "/path/to/store/training/results" # please set this variable to be the path where you want to save the training results
+  train_flag: False
+  train_batch_size: 50000 # please set this variable to be the size of the training batches in one training iteration
