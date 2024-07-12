@@ -40,7 +40,7 @@ def acceleration(ego_vehicle=None, front_vehicle=None, mode=None):
     Args:
         ego_vehicle (dict, optional): Information of the vehicle whose desired acceleration is to be computed. It does not have to be an IDM vehicle, which is why this method is a class method. This allows an IDM vehicle to reason about other vehicles behaviors even though they may not IDMs. Defaults to None.
         front_vehicle (dict, optional): Information of the vehicle preceding the ego-vehicle. Defaults to None.
-        mode (str, optional): Difference IDM parameters for BV and CAV. Defaults to None.
+        mode (str, optional): Different IDM parameters for BV and CAV. Defaults to None.
 
     Returns:
         float: Acceleration command for the ego-vehicle in m/s^2.
@@ -68,7 +68,7 @@ def desired_gap(ego_vehicle, front_vehicle=None, mode=None):
     Args:
         ego_vehicle (dict): Information of the controlled vehicle.
         front_vehicle (dict, optional): Information of the leading vehicle. Defaults to None.
-        mode (str, optional): Difference IDM parameters for BV and CAV. Defaults to None.
+        mode (str, optional): Different IDM parameters for BV and CAV. Defaults to None.
 
     Returns:
         float: Desired distance between the two vehicles in m.
@@ -173,10 +173,10 @@ class LowSpeedNDDController(BaseController):
         """Apply the Mobil surrogate model for CAV Lane change to calculate the gain for this lane change maneuver. If it does not have safety issue, then return True, gain; otherwise False, None.
 
         Args:
-            lane_index (integer): Candidate lane for the change.
+            lane_index (integer): Candidate lane index for the lane change maneuver.
 
         Returns:
-            bool: Safety flag (whether ADS will crash immediately after doing LC).
+            bool: Safety flag (whether ADS will crash immediately after doing the lane change).
             float: Gain.
         """
         gain = None
@@ -242,7 +242,7 @@ class LowSpeedNDDController(BaseController):
 
     @staticmethod
     def get_MOBIL_stochastic_pdf(cav_obs):
-        """Obtain the lane change probability of CAV. If ADS will not immediately crash, then the LC probability is at least epsilon_lane_change_prob map gain from [0, 1] to LC probability [epsilon_lane_change_prob, max_remaining_LC_prob].
+        """Obtain the lane change probability of CAV. If ADS will not immediately crash, then the lane change probability is at least epsilon_lane_change_prob map gain from [0, 1] to lane change probability [epsilon_lane_change_prob, max_remaining_LC_prob].
 
         Returns:
             float: Left-lane-change possibility.
@@ -298,7 +298,7 @@ class LowSpeedNDDController(BaseController):
 
     # @profile
     def step(self):
-        """Controller decide the next action for the vehicle.
+        """Controller will decide the next action for the vehicle.
 
         Returns:
             np.array: NDD pdf.

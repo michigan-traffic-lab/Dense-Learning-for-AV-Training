@@ -20,7 +20,14 @@ from mtlsp.network.trafficnet import TrafficNet
 import mtlsp.utils as utils
 import time
 import json, ujson
+
+
 def dummy_function (sim):
+    """Dummy function for pre-step.
+
+    Args:
+        sim (Simulator): Simulator object.
+    """
     return
 
 
@@ -214,10 +221,10 @@ class Simulator(object):
         self.started = True
 
     def traci_step(self, duration):
-        """Simulation steps forwards.
+        """SUMO simulation steps forwards for certain duration.
 
         Args:
-            duration (float): Step length in seconds.
+            duration (float): Duration of simulation.
         """        
         sim_step = traci.simulation.getTime()+duration
         traci.simulationStep(step=sim_step)
@@ -335,7 +342,7 @@ class Simulator(object):
             edge_id (str, optional): Edge ID. Defaults to None.
 
         Returns:
-            list(sumo lane object): Possible lanes to insert vehicles
+            list(object): Possible lanes to insert vehicles
         """        
         sumo_net = sumolib.net.readNet(self.sumo_net_file_path)
         if edge_id == None:
@@ -1103,7 +1110,7 @@ class Simulator(object):
             vehID (str): Vehicle ID.
 
         Returns:
-            interger: Number of lanes.
+            int: Number of lanes.
         """        
         return traci.edge.getLaneNumber(traci.vehicle.getRoadID(vehID))
     

@@ -17,6 +17,11 @@ import xmltodict
 
 class NADEInfoExtractor(InfoExtractor):  
     def __init__(self, env):
+        """Initialize the NADEInfoExtractor class.
+
+        Args:
+            env (object): Environment instance.
+        """
         super().__init__(env)
         self.episode_log = {
             "episode_info": None,
@@ -48,10 +53,10 @@ class NADEInfoExtractor(InfoExtractor):
         """Convert the trajectory information to JSON format.
 
         Args:
-            prev_traj (Dict): Trajectory information.
+            prev_traj (dict): Trajectory information.
 
         Returns:
-            Dict: Serialized trajectory information.
+            dict: Serialized trajectory information.
         """        
         if prev_traj is None:
             return None

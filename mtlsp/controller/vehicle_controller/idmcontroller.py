@@ -208,7 +208,8 @@ class IDMController(BaseController):
             observation (dict): Observation of the vehicle.
 
         Returns:
-            bool, float: Whether it is feasible to do the lane change maneuver. Lane change gain.
+            bool: Whether it is feasible to do the lane change maneuver.
+            float: Lane change gain.
         """
         gain = None
         ego = observation["Ego"]

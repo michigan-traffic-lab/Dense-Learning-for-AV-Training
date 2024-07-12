@@ -60,6 +60,8 @@ def cal_dis_with_start_end_speed(v_start, v_end, acc, time_interval=1.0, v_low=2
         v_end (float): End speed [m/s].
         acc (float): Acceleration [m/s^2].
         time_interval (float, optional): Time interval [s]. Defaults to 1.0.
+        v_low (int, optional): Low speed [m/s]. Defaults to 20.
+        v_high (int, optional): High speed [m/s]. Defaults to 40.
 
     Returns:
         float: Travel distance in the time interval.
@@ -243,7 +245,7 @@ def helper_state_update(states, action, parameters):
     Args:
         states (list): Vehicle states including longitudinal speed in vehicle coordinate, longitudinal position in road coordinate, lateral position in road coordinate, heading in absolute coordinate, lateral speed in vehicle coordinate, yaw rate in absolute coordinate.
         action (dict): Next action including longitudinal acceleration in vehicle coordinate and steering angle.
-        parameters (dict): Vehicle dynamics parameters including a, L, m, Iz, Caf, Car.
+        parameters (dict): Vehicle dynamics parameters.
 
     Returns:
         list: New vehicle states with the same format as the original states.

@@ -33,7 +33,7 @@ def env_creator(env_config):
     """Create an environment instance for RLLIB.
 
     Args:
-        env_config (Dict): configuration of the environment.
+        env_config (dict): configuration of the environment.
 
     Returns:
         object: Environment instance.
@@ -253,7 +253,7 @@ def load_data_info_new():
     """Load the information of the latest training dataset.
 
     Returns:
-        Dict: Dictionary containing the information of the latest training dataset.
+        dict: Dictionary containing the information of the latest training dataset.
     """
     if isinstance(conf.data_info_new_path, list) and len(conf.data_info_new_path) > 1:
         data_info_new = []
@@ -281,10 +281,10 @@ def sample_eval_index_list_eval_worker(data_info_new):
     """Sample the episodes for evaluation after each training iteration.
 
     Args:
-        data_info_new (Dict): Dictionary containing the information of the latest training dataset.
+        data_info_new (dict): Dictionary containing the information of the latest training dataset.
 
     Returns:
-        tuple(List): Lists containing the information of episodes for each evaluation RolloutWorker.
+        tuple(list): Lists containing the information of episodes for each evaluation RolloutWorker.
     """
     if isinstance(data_info_new, list):
         tmp_safe_id_list, tmp_safe_weight_arr, p_weight = [], [], []
@@ -539,11 +539,13 @@ def sample_eval_index_list_eval_worker(data_info_new):
 
 def custom_eval_function2(trainer, eval_workers):
     """Example of a custom evaluation function.
+
     Args:
         trainer (Trainer): Trainer instance to evaluate the latest policy.
         eval_workers (WorkerSet): Evaluation workers.
+    
     Returns:
-        metrics (Dict): Results of the evaluation metrics.
+        dict: Results of the evaluation metrics.
     """
     t0 = time.time()
     load_data_info_origin()
@@ -949,10 +951,10 @@ def update_based_on_safe_score_new(data_info_dict):
     """Update the information of the latest training dataset based on the evaluation results.
 
     Args:
-        data_info_dict (Dict): Information of the latest training dataset.
+        data_info_dict (dict): Information of the latest training dataset.
 
     Returns:
-        Dict: Updated information of the training dataset.
+        dict: Updated information of the training dataset.
     """
     new_data_info_dict = {
         "crash_id_list": [],
@@ -1020,10 +1022,10 @@ def update_based_on_safe_score_new_multiple(data_info_dict):
     """Update multiple training datasets based on the evaluation results.
 
     Args:
-        data_info_dict (list[Dict]): List of the information for multiple training datasets.
+        data_info_dict (list(dict)): List of the information for multiple training datasets.
 
     Returns:
-        list[Dict]: List of updated information for multiple training datasets.
+        list(dict): List of updated information for multiple training datasets.
     """
     new_data_info_dict = []
     for j in range(len(data_info_dict)):

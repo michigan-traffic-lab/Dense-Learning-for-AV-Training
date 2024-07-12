@@ -30,7 +30,9 @@ def NDE_worker(episode, experiment_path):
         experiment_path (str): Path of the experiment.
 
     Returns:
-        tuple: ID of the episode, stop information, and mean speed of CAVs.
+        int: ID of the episode.
+        dict: Ending information of the episode.
+        float: Mean speed of CAV.
     """
     print("id:", episode)
     env = NDE(

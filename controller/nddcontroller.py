@@ -62,7 +62,7 @@ class NDDController(BaseController):
 
     # @profile
     def get_ndd_pdf(self, obs=None, external_use=False):
-        """Obtain the NDD probability of the BV maneuvers.
+        """Calculate the NDD probability of the BV maneuvers.
 
         Args:
             obs (dict): Observation of the surrounding vehicles.
@@ -166,7 +166,7 @@ class NDDController(BaseController):
 
         Returns:
             float: Probability of one lead lane change.
-            tuple: Related information of the lane change.
+            tuple: Additioanl information of the lane change.
         """
         v = full_obs["Ego"]["velocity"]
         if not conf.enable_One_lead_LC:
@@ -210,7 +210,7 @@ class NDDController(BaseController):
 
         Returns:
             float: Probability of double lane change.
-            tuple: Related information of the lane change.
+            tuple: Additional information of the lane change.
         """             
         v = full_obs["Ego"]["velocity"]
         # v_list, r1_list, r2_list, rr1_list, rr2_list = list(np.linspace(conf.lc_v_low,conf.lc_v_high,num=conf.lc_v_num)), list(np.linspace(conf.lc_rf_low,conf.lc_rf_high,num=conf.lc_rf_num)), list(np.linspace(conf.lc_re_low,conf.lc_re_high,num=conf.lc_re_num)), list(np.linspace(conf.lc_rrf_low,conf.lc_rrf_high,num=conf.lc_rrf_num)), list(np.linspace(conf.lc_rre_low,conf.lc_rre_high,num=conf.lc_rre_num))
@@ -259,7 +259,7 @@ class NDDController(BaseController):
 
         Returns:
             float: Probability of single lane change.
-            tuple: Related information of the lane change.
+            tuple: Additional information of the lane change.
         """       
         v = full_obs["Ego"]["velocity"]
         # v_list, r1_list, r2_list, rr1_list, rr2_list = list(np.linspace(conf.lc_v_low,conf.lc_v_high,num=conf.lc_v_num)), list(np.linspace(conf.lc_rf_low,conf.lc_rf_high,num=conf.lc_rf_num)), list(np.linspace(conf.lc_re_low,conf.lc_re_high,num=conf.lc_re_num)), list(np.linspace(conf.lc_rrf_low,conf.lc_rrf_high,num=conf.lc_rrf_num)), list(np.linspace(conf.lc_rre_low,conf.lc_rre_high,num=conf.lc_rre_num))
@@ -302,7 +302,7 @@ class NDDController(BaseController):
     @staticmethod
     # @profile
     def _get_Cut_in_LC_prob(veh_front, veh_adj_rear, full_obs):
-        """Get the probability of cut-in lane change.
+        """Get the probability of cut-in behavior.
 
         Args:
             veh_front (dict): Information of the front vehicle.
@@ -310,8 +310,8 @@ class NDDController(BaseController):
             full_obs (dict): Observation of the surrounding vehicles.
 
         Returns:
-            float: Probability of cut-in lane change.
-            tuple: Related information of the lane change.
+            float: Probability of cut-in behavior.
+            tuple: Additional information of the lane change.
         """
         v = full_obs["Ego"]["velocity"]
         # v_list, r1_list, r2_list, rr1_list, rr2_list = list(np.linspace(conf.lc_v_low,conf.lc_v_high,num=conf.lc_v_num)), list(np.linspace(conf.lc_rf_low,conf.lc_rf_high,num=conf.lc_rf_num)), list(np.linspace(conf.lc_re_low,conf.lc_re_high,num=conf.lc_re_num)), list(np.linspace(conf.lc_rrf_low,conf.lc_rrf_high,num=conf.lc_rrf_num)), list(np.linspace(conf.lc_rre_low,conf.lc_rre_high,num=conf.lc_rre_num))
@@ -432,7 +432,7 @@ class NDDController(BaseController):
     @staticmethod
     # @profile
     def Lateral_NDD(obs):
-        """Decide the Lateral movement based on the NDD.
+        """Decide the lateral movement based on the NDD.
 
         Args:
             obs (dict): Observation of the surrounding vehicles.
@@ -519,12 +519,12 @@ class NDDController(BaseController):
     @staticmethod 
     # @profile
     def round_to_(val, round_item, round_to_closest):
-        """Round the val to the round_to_closest (for example 1.0, 0.2 ...)
+        """Round the val to the cloest value given the rule.
 
         Args:
             val (float): Value to round.
             round_item (str): Item to round.
-            round_to_closest (float): Round to the closest.
+            round_to_closest (float): Resolution.
 
         Returns:
             float: Rounded value.
@@ -572,10 +572,10 @@ class NDDController(BaseController):
     @staticmethod 
     # @profile
     def _MOBIL_model(lc_decision, obs):
-        """Mobil model for the NDD vehicle Lane change.
+        """Calculate the results of Mobil model for the background vehicle's lane change behavior.
 
         Args:
-            lc_decision: The candidate lane for the change.
+            lc_decision: The candidate lane change behavior.
             obs: Observation of surrounding vehicles.
 
         Returns:
@@ -621,14 +621,14 @@ class NDDController(BaseController):
     @staticmethod
     # @profile
     def MOBIL_result(obs):
-        """Given the MOBIL model, calculate the left/right turn probability suggested by the MOBIL model.
+        """Calculate the left/right lane change probability suggested by the MOBIL model.
 
         Args:
             obs: Observation of surrounding vehicles.
 
         Returns:
-            float: Probability of left turn.
-            float: Probability of right turn.
+            float: Probability of left lane change.
+            float: Probability of right lane change.
         """
         left_prob, right_prob = 0, 0
         if not conf.enable_MOBIL:
@@ -658,14 +658,14 @@ class NDDController(BaseController):
     @staticmethod
     # @profile
     def check_whether_has_CF_data(ego, f1):
-        """If there is no CF data, then use IDM+MOBIL to decide the vehicle's maneuver.
+        """If there is no car-following data, then use IDM+MOBIL to decide the vehicle's maneuver.
 
         Args:
             ego: Information of the ego vehicle.
             f1: Information of the front vehicle.
 
         Returns:
-            bool: Whether there is CF data.
+            bool: Whether there is car-following data.
         """
         v = ego["velocity"]
         r = f1["distance"]
@@ -683,14 +683,14 @@ class NDDController(BaseController):
     @staticmethod 
     # @profile
     def Longitudinal_NDD(obs, vehicle_length=conf.LENGTH):
-        """Decide the Longitudinal acceleration based on the NDD.
+        """Decide the longitudinal acceleration based on the NDD.
 
         Args:
             obs (dict): Observation of the surrounding vehicles.
             vehicle_length (float): Length of the vehicle.
         
         Returns:
-            float: Acceleration.
+            float: Selected acceleration.
             np.array: Probability of different acceleration.
         """
         if not list(conf.CF_pdf_array):

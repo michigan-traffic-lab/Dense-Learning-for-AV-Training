@@ -25,7 +25,7 @@ def is_lane_change(obs_ego):
     """Check if the ego vehicle is doing lane change.
 
     Args:
-        obs_ego (Dict): Observation of the ego vehicle.
+        obs_ego (dict): Observation of the ego vehicle.
 
     Returns:
         bool: Whether the ego vehicle is doing lane change.
@@ -184,7 +184,7 @@ def action_id_to_action_command(action_id):
         action_id (int): ID of the action.
 
     Returns:
-        Dict: Action command.
+        dict: Action command.
     """
     action = None
     if action_id == 0:
@@ -288,7 +288,9 @@ def _round_data_plain(v, r, rr):
         rr (float): Range rate [m/s].
 
     Returns:
-        int, int, int: Rounded speed, range, and range rate.
+        int: Rounded speed [m/s].
+        int: Rounded vehicle range [m]. 
+        int: Rounded range rate [m/s].
     """
     return round(v), round(r), round(rr)
 
@@ -297,12 +299,14 @@ def _round_data_test(v, r, rr):
     """Round the speed, vehicle range and range rate to the closest integer.
 
     Args:
-        v (double): Speed [m/s].
-        r (double): Vehicle range [m].
-        rr (double): Range rate [m/s].
+        v (float): Speed [m/s].
+        r (float): Vehicle range [m].
+        rr (float): Range rate [m/s].
 
     Returns:
-        (integer, integer, integer): Rounded speed [m/s], range [m] and range rate [m/s].
+        int: Rounded speed [m/s].
+        int: Rounded vehicle range [m]. 
+        int: Rounded range rate [m/s].
     """
     if v < conf.v_low:
         v_round = conf.v_low
@@ -355,9 +359,9 @@ def check_equal(x, y, error):
     """Check if x is approximately equal to y considering the given error.
 
     Args:
-        x (double): Parameter 1.
-        y (double): Parameter 2.
-        error (double): Specified error.
+        x (float): Parameter 1.
+        y (float): Parameter 2.
+        error (float): Specified error.
 
     Returns:
         bool: True is x and y are close enough. Otherwise, False.
@@ -398,7 +402,7 @@ def pre_process_subscription(subscription, veh_id=None, distance=0.0):
         distance (float, optional): Distance from the ego vehicle [m]. Defaults to 0.0.
 
     Returns:
-        dict: Standard for of vehicle information.
+        dict: Standard format of vehicle information.
     """
     if not veh_id:
         return None
@@ -577,7 +581,8 @@ def detect_crash_three_circle(cav_center_list, veh_center_list):
         veh_center_list (_type_): Position of the three circles' center covering BV.
 
     Returns:
-        (bool, float): Whether the crash happens and the minimum distance between the two vehicles.
+        bool: Whether the crash happens.
+        float: Minimum distance between the two vehicles.
     """
     crash_flag = False
     distance_power_list = []
@@ -635,6 +640,13 @@ def _cal_box(x, y, length, width, rotation):
 class DuelingNet(nn.Module):
     # for CAV
     def __init__(self, n_feature, n_hidden, n_output):
+        """Initialize the Dueling Network.
+
+        Args:
+            n_feature (int): Number of features.
+            n_hidden (int): Number of hidden layers.
+            n_output (int): Number of output layers.
+        """
         super(DuelingNet, self).__init__()
         # print("Using Dueling Network!")
         self.exp_item = 0  # marks the num that the expPool has stored

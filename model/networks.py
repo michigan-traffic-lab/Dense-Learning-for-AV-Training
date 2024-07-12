@@ -62,7 +62,7 @@ class SimpleLinearModel(nn.Module):
         """Initialize the SimpleLinearModel.
 
         Args:
-            yaml_conf (dict): The configuration dictionary.
+            yaml_conf (dict): The configuration information.
             input_dim (int): The input dimension.
             output_dim (int): The output dimension.
         """
@@ -71,7 +71,7 @@ class SimpleLinearModel(nn.Module):
         self.linear = nn.Linear(in_features=input_dim, out_features=output_dim, bias=True)
 
     def forward(self, x):
-        """Forward pass of the model.
+        """Forward function of the model.
 
         Args:
             x (torch.Tensor): The input tensor.
@@ -92,7 +92,7 @@ class SimpleMLP(nn.Module):
         """Initialize the SimpleMLP.
 
         Args:
-            yaml_conf (dict): The configuration dictionary.
+            yaml_conf (dict): The configuration information.
             input_dim (int): The input dimension.
             output_dim (int): The output dimension.
         """
@@ -106,7 +106,7 @@ class SimpleMLP(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        """Forward pass of the model.
+        """Forward function of the model.
 
         Args:
             x (torch.Tensor): The input tensor.
@@ -133,7 +133,7 @@ class BnMLP(nn.Module):
         """Initialize the BnMLP.
 
         Args:
-            yaml_conf (dict): The configuration dictionary.
+            yaml_conf (dict): The configuration information.
             input_dim (int): The input dimension.
             output_dim (int): The output dimension.
         """
@@ -151,7 +151,7 @@ class BnMLP(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        """Forward pass of the model.
+        """Forward function of the model.
 
         Args:
             x (torch.Tensor): The input tensor.
@@ -178,7 +178,7 @@ class BnMLP_sigmoid(nn.Module):
         """Initialize the BnMLP_sigmoid.
 
         Args:
-            yaml_conf (dict): The configuration dictionary.
+            yaml_conf (dict): The configuration information.
             input_dim (int): The input dimension.
             output_dim (int): The output dimension.
         """
@@ -197,7 +197,7 @@ class BnMLP_sigmoid(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        """Forward pass of the model.
+        """Forward function of the model.
 
         Args:
             x (torch.Tensor): The input tensor.
@@ -232,7 +232,7 @@ class BnMLP_sigmoid_simplified(nn.Module):
         """Initialize the BnMLP_sigmoid_simplified.
 
         Args:
-            yaml_conf (dict): The configuration dictionary.
+            yaml_conf (dict): The configuration information.
             input_dim (int): The input dimension.
             output_dim (int): The output dimension.
         """
@@ -247,7 +247,7 @@ class BnMLP_sigmoid_simplified(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        """Forward pass of the model.
+        """Forward function of the model.
 
         Args:
             x (torch.Tensor): The input tensor.
@@ -292,7 +292,7 @@ class BnMLP_sigmoid_single_layer(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        """Forward pass of the model.
+        """Forward function of the model.
 
         Args:
             x (torch.Tensor): The input tensor.
@@ -343,7 +343,7 @@ class PositionalMapping(nn.Module):
         self.heading_scale = heading_scale
 
     def forward(self, x):
-        """Forward pass of the model.
+        """Forward function of the model.
 
         Args:
             x (torch.Tensor): The input tensor.
@@ -397,7 +397,7 @@ class PredictionsHeads(nn.Module):
         self.out_net_cos_sin_heading = nn.Linear(in_features=h_dim, out_features=int(output_dim/2), bias=True)
 
     def forward(self, x):
-        """Forward pass of the model.
+        """Forward function of the model.
 
         Args:
             x (torch.Tensor): The input tensor.

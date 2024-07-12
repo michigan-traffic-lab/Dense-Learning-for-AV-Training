@@ -283,6 +283,9 @@ class Traj:
             start_time (float): The start time.
             end_time (float): The end time.
             time_resolution (float, optional): The time resolution. Defaults to 0.1.
+
+        Raises:
+            ValueError: Interpolate between non-existing points.
         """
         ini_info = self.traj_info["%.1f" % start_time]
         end_info = self.traj_info["%.1f" % end_time]
@@ -340,6 +343,7 @@ class TreeSearchNADEBackgroundController(NADEBackgroundController):
 
         Returns:
             dict: The updated observation of the vehicle.
+            Traj: The trajectory of the vehicle.
         """
         if acceleration is None:
             acceleration = veh["acceleration"]
@@ -370,13 +374,11 @@ class TreeSearchNADEBackgroundController(NADEBackgroundController):
         """Check whether the given two vehicle is following each other.
 
         Args:
-            CAV (dict): CAV Ego observation.
-            BV (dict): BV Ego observation.
             cav_obs (dict): CAV total observation.
             bv_obs (dict): BV total observation.
 
         Returns:
-            str: the CF condition of CAV and BV.
+            str: the car-following condition of CAV and BV.
         """
         CF_info = False
         bv_r1 = bv_obs['Foll']
@@ -603,10 +605,10 @@ class TreeSearchNADEBackgroundController(NADEBackgroundController):
         Args:
             prev_full_obs (dict): The previous full observation.
             full_traj (dict): The full trajectory.
-            time (str): The time.
+            time (str): The time step.
 
         Returns:
-            dict: The observation.
+            dict: The processed observation.
         """
         obs = {}
         for key in prev_full_obs:
@@ -635,6 +637,7 @@ class TreeSearchNADEBackgroundController(NADEBackgroundController):
 
         Returns:
             dict: The updated full observation.
+            dict: The updated trajectory information.
         """
         new_full_obs = {}
         for key in full_obs:
@@ -776,7 +779,7 @@ class TreeSearchNADEBackgroundController(NADEBackgroundController):
             veh_id (str): The vehicle ID.
 
         Returns:
-            dict: The single observation.
+            dict: Observation of the vehicle.
         """
         obs = {"Ego": full_obs[veh_id]}
         obs["Lead"] = TreeSearchNADEBackgroundController._process_info(full_obs,veh_id,longi=1,lateral=0)
@@ -911,14 +914,14 @@ class TreeSearchNADEBackgroundController(NADEBackgroundController):
             full_obs (dict): Obervation of all the controlled BV candidates.
             cav_id (str): ID of CAV.
             bv_id (str): ID of the BV that will be controlled.
-            search_depth (int): The depth of the tree.
+            search_depth (int): The depth of the search tree.
             cav_obs (dict, optional): CAV observation information. Defaults to None.
             bv_obs (dict, optional): BV observation information. Defaults to None.
             predicted_full_obs (dict, optional): Predicted full observation. Defaults to None.
             predicted_full_traj (dict, optional): Predicted full trajectory. Defaults to None.
 
         Returns:
-            np.array: Challenge(the prob of having crashes).
+            np.array: Challenge(the prob of having crashes) of different BV actions.
             np.array: The probability density function of the BV action.
         """
         challenge_array = np.zeros(
@@ -956,14 +959,14 @@ class TreeSearchNADEBackgroundController(NADEBackgroundController):
     @staticmethod
     # @profile
     def get_CF_challenge_array(cav_obs, bv_obs):
-        """Get the challenge array of the CF condition.
+        """Get the challenge array of the car-following condition.
 
         Args:
             cav_obs (dict): CAV observation information.
             bv_obs (dict): BV observation information.
 
         Returns:
-            np.array: The challenge array.
+            np.array: The challenge array considering the car-following scenario.
         """
         CF_info, bv_v, bv_range_CAV, bv_rangerate_CAV = TreeSearchNADEBackgroundController.is_CF(
             cav_obs, bv_obs)
@@ -989,8 +992,8 @@ class TreeSearchNADEBackgroundController(NADEBackgroundController):
             bv_obs (dict): BV observation information.
 
         Returns:
-            dict: The probability density function of the CAV action.
-            dict: The probability density function of the BV action.
+            dict: Information about the probability of the CAV action.
+            dict: Information about the probability of the BV action.
             np.array: The probability density function of the CAV action.
             np.array: The probability density function of the BV action.
         """
@@ -1024,7 +1027,10 @@ class TreeSearchNADEBackgroundController(NADEBackgroundController):
             SM_LC_prob (list): The left, still and right turn probabiltiy.
 
         Returns:
-            np.array: Criticality array of a specific CAV.
+            float: Criticality of a specific background vehicle.
+            np.array: Criticality array of a specific background vehicle.
+            np.array: Challenge array of a specific background vehicle.
+            float: Risk of a specific background vehicle considering the action probability.
         """
         # if utils.is_lane_change(bv_obs["Ego"]):
         #     return 0, None, None

@@ -17,7 +17,7 @@ class TrafficNet:
         """Get the available lanes ids in the sumo network
 
         Returns:
-            list(str object): Possible lanes to insert vehicles
+            list(object): Possible lanes to insert vehicles
         """
         return [lane.getID() for lane in self.get_available_lanes()]
 
@@ -26,7 +26,7 @@ class TrafficNet:
         """Get the available lanes in the sumo network
 
         Returns:
-            list(sumo lane object): Possible lanes to insert vehicles
+            list(object): Possible lanes to insert vehicles
         """        
         sumo_edges = self.sumo_net.getEdges()
         available_lanes = []

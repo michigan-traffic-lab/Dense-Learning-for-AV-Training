@@ -22,7 +22,7 @@ bash main_testing_mp.sh -n 4
 ```
 
 ## 2. (Optional) Modify the configuration file
-Suppose you want to change the experiment name, modify the path to store the evaluation results, or evaluate a different AV algorithm, please go to the [configuration file](yaml_configs/testing.yaml) and modify the following variables accordingly:
+Suppose you want to change the experiment name, modify the path to store the evaluation results, or evaluate a different AV algorithm, please go to the [configuration file](../yaml_configs/testing.yaml) and modify the following variables accordingly:
 
 a. Modify the experiment name by changing the **experiment_name**.
 ```yaml

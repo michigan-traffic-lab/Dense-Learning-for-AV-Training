@@ -38,11 +38,6 @@ class Vehicle(object):
             initial_speed (float, optional): Initial speed of the vehicle. Defaults to None.
             initial_position (list, optional): Initial position of the vehicle. Defaults to None.
             initial_lane_id (str, optional): Initial lane ID of the vehicle. Defaults to None.
-
-        Raises:
-            ValueError: When no vehicle ID is provided, raise error.
-            ValueError: When no controller is provided, raise error.
-            ValueError: When no simulator is provided, raise error.
         """
         if conf.simulation_config["speed_mode"] == "low_speed":
             self.v_low, self.v_high = 0, 20
@@ -429,6 +424,9 @@ class VehicleDynamics(Vehicle):
 
         Args:
             parameters (dict): Important vehicle dynamics parameters. 
+
+        Raises:
+            ValueError: When the important vehicle dynamics parameters are not included, raise error.
         """
         for param in ["L", "a", "m", "Iz", "Caf", "Car", "g"]:
             if param not in parameters.keys():

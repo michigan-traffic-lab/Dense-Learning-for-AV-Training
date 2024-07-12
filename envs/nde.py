@@ -86,7 +86,7 @@ class NDE(BaseEnv):
         """NDE simulation step.
 
         Args:
-            action (np.array): Action of the CAV.        
+            action (np.array): Action of the CAV. Defaults to None.        
         """
         self.cav_action = action
         if action is None:
@@ -195,7 +195,7 @@ class NDE(BaseEnv):
                             vehID, info)
 
     def soft_reboot(self):
-        """Delete all vehicles and re-generate all vehicles on the road
+        """Delete all vehicles and re-generate all vehicles on the road.
         """
         # ! tmp disable the delete vehicle capacity
         # self.delete_all_vehicles()
@@ -349,7 +349,8 @@ class NDE(BaseEnv):
 
     @staticmethod
     def generate_random_vehicle():
-        """Generate a random vehicle at the beginning of the road/in FF mode.
+        """Generate a random vehicle at the beginning of the road in the free-flow mode.
+
         Returns:
             float: Speed of the vehicle.
             float: Position of the vehicle.
@@ -365,7 +366,7 @@ class NDE(BaseEnv):
 
     @staticmethod
     def sample_CF_FF_mode():
-        """Randomly choose the CF or FF mode to generate vehicles.
+        """Randomly choose the car-following or free-flow mode to generate vehicles.
 
         Returns:
             str: Mode ID.
@@ -377,13 +378,13 @@ class NDE(BaseEnv):
             return "CF"
 
     def generate_FF_vehicle(self, back_speed_position=None, direction=1):
-        """Generate vehicle in FF mode, back_vehicle is needed.
+        """Generate vehicle in free-flow mode, the vehicle driving behind is needed.
 
         Args:
-            back_vehicle (dict, optional): speed and position. Defaults to None.
+            back_vehicle (dict, optional): Speed and position of the vehicle driving behind. Defaults to None.
 
         Returns:
-            dict: Return the given speed and position.
+            dict: Return the speed and position of the newly created vehicle.
         """
         if back_speed_position is not None:
             rand_speed, rand_position = self.generate_random_vehicle()
@@ -395,13 +396,13 @@ class NDE(BaseEnv):
                 "Warning: generating FF vehicle with no back vehicle")
 
     def generate_CF_vehicle(self, back_speed_position=None, direction=1):
-        """Generate vehicles in the CF mode.
+        """Generate vehicles in the car-following scenario.
 
         Args:
-            back_speed_position (dict, optional): Speed and position. Defaults to None.
+            back_speed_position (dict, optional): Speed and position of the last created vehicle. Defaults to None.
 
         Returns:
-            dict: Vehicle information including speed, and position.
+            dict: New created vehicle information including speed, and position.
         """
         if back_speed_position["speed"] < conf.v_low:
             presum_list = conf.presum_list_forward[conf.v_to_idx_dic[conf.v_low]]
@@ -573,7 +574,7 @@ class NDE(BaseEnv):
     @staticmethod
     # @profile
     def _transfer_obs_to_state(cav_info, cav_context, simulator, cav):
-        """Transfer the observation to the state for the CAV agent.
+        """Transfer the observation to the input for the CAV agent.
 
         Args:
             cav_info (dict): CAV information.
@@ -582,7 +583,7 @@ class NDE(BaseEnv):
             cav (object): CAV vehicle.
 
         Returns:
-            np.array: State of the CAV agent.
+            np.array: Input of the CAV agent.
         """
         veh_length = 5
         cav_pos = cav_info[66]
@@ -638,7 +639,7 @@ class NDE(BaseEnv):
     @staticmethod
     # @profile
     def _transfer_obs_to_neuralmetricstate(cav_info, cav_context, simulator, cav):
-        """Transfer the observation to the state for the neural metric.
+        """Transfer the observation to the input for the neural metric.
 
         Args:
             cav_info (dict): CAV information.
@@ -647,7 +648,7 @@ class NDE(BaseEnv):
             cav (object): CAV vehicle.
 
         Returns:
-            np.array: State of the neural metric.
+            np.array: Input of the neural metric.
         """
         cav_x, cav_y = cav_info[66][0], cav_info[66][1]
         cav_v = cav_info[64]
@@ -758,8 +759,8 @@ class NDE(BaseEnv):
         """Detect the crash in the simulation.
 
         Returns:
-            bool: Flag of whether the crash is detected.
-            tuple: ID tuple for the collided vehicles.
+            bool: Flag representing whether the crash is detected.
+            tuple: ID tuple for the collided vehicles if any.
         """
         crash_flag = False
         crash_id_tuple = ()

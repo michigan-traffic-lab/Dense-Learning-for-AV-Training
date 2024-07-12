@@ -2,7 +2,7 @@
 Since the whole training process is time-consuming, we provide all the data of one iteration initializing from the base AV model to prove the effectiveness of our methodology. 
 
 ## 1. Download the raw data
-Please download the data from [this link](https://drive.google.com/file/d/1vV_zsZjsQToRCOXubCdYUB53lmUUPGjh/view?usp=drive_link) and extract it within the root folder. The example data folder should have the following structure:
+Please download the data from [this link](https://zenodo.org/records/12735037) and extract the zip file named "Example_Training_Iteration.zip" within the current workspace. The example data folder should have the following structure:
 ```
 Dense-Learning-for-AV-Training/Example_Training_Iteration/
 |__testing_results/
@@ -13,7 +13,7 @@ Dense-Learning-for-AV-Training/Example_Training_Iteration/
 |_____densemodel_fdm369_dm394.pt
 ```
 
-If you want to analyze the evaluation results, please go to the [Jupyter Notebook](data_analysis/crash_rate_analysis.ipynb) and modify the variables named "root_folder" and "experiment_folder" in the first cell. Then, please press the "Run All" button to get the estimated crash rate in NDE for the base AV model, which is equal to 6.25e-05. The evaluation results should look like this:
+If you want to analyze the evaluation results, please go to the [Jupyter Notebook](../data_analysis/crash_rate_analysis.ipynb) and modify the variables named "**root_folder**" and "**experiment_folder**" in the first cell. Then, please press the "Run All" button to get the estimated crash rate in NDE for the base AV model, which is equal to 6.25e-05. The evaluation results should look like this:
 
 <img src='figures/demo_basemodel.png' width='700'> 
 

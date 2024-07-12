@@ -102,7 +102,7 @@ class Observation(ABC):
             distance (float, optional): Distance from the ego vehicle [m]. Defaults to 0.0.
 
         Returns:
-            dict: Standard vehicle information.
+            dict: Standard format of vehicle information.
         """
         if not veh_id:
             return None

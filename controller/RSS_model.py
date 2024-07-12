@@ -692,7 +692,7 @@ class highway_RSS_model(RSS_model):
             a_brake_min_lat (float): Minimum lateral braking.
 
         Returns:
-            float: Minimum safe distance.
+            float: Minimum safe distance in the lateral direction.
         """
         v_upper_rho, v_lower_rho = v_upper - a_accel_max_lat * rho, v_lower + a_accel_max_lat * rho
 

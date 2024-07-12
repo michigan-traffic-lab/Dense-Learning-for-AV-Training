@@ -57,6 +57,10 @@ with open(yaml_path) as fp:
 assert yaml_config is not None
 experiment_config = yaml_config["experiment_config"]
 simulation_config = yaml_config["simulation_config"]
+simulation_config["neuralmetric_config"]["ckpt"] = os.path.join(experiment_config["code_root_folder"], simulation_config["neuralmetric_config"]["ckpt"])
+simulation_config["pytorch_model_path_list"][0] = os.path.join(experiment_config["code_root_folder"], simulation_config["pytorch_model_path_list"][0])
+simulation_config["pytorch_nade_model_path"] = os.path.join(experiment_config["code_root_folder"], simulation_config["pytorch_nade_model_path"])
+
 data_folder = experiment_config["data_folder"]
 data_info_origin_path = os.path.join(data_folder[0], "offline_av_alldata_new.json")
 data_info_new_path = os.path.join(data_folder[0], "offline_av_neweval_crashnearmiss_new.json")

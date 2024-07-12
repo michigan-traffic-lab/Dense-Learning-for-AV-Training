@@ -11,7 +11,10 @@ class NN_Metric():
         """Initialize the NN_Metric class.
 
         Args:
-            yaml_conf (dict): Configuration of the yaml file.
+            yaml_conf (dict): Configuration information from the yaml file.
+
+        Raises:
+            NotImplementedError: If the pre-trained weights does not exist.
         """
         self.device = torch.device("cpu")
         self.yaml_conf = yaml_conf
@@ -36,7 +39,7 @@ class NN_Metric():
             x (np.array): Input of the neural network model.
 
         Returns:
-            float: Output of the neural network model.
+            float: Output of the neural network model, which is the criticality of the current situation.
         """
         x = torch.Tensor(x).to(self.device)
         # Apply the inference

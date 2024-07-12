@@ -34,7 +34,7 @@ class NADEBackgroundController(NDDController):
 
     # @profile
     def get_NDD_possi(self):
-        """Obtain the possibility of the BV maneuvers.
+        """Obtain the possibility of the BV maneuvers based on NDD.
 
         Returns:
             np.array: Possibility of the BV maneuvers.
@@ -55,6 +55,7 @@ class NADEBackgroundController(NDDController):
             float: Weight of the BV action.
             float: Possibility of the BV action.
             float: Criticality of the BV action.
+            list(float): List of weight of each BV maneuver.
         """        
         normalized_critical_pdf_array = criticality_array / bv_criticality
         epsilon_pdf_array = utils.epsilon_greedy(normalized_critical_pdf_array, ndd_possi_array, epsilon=epsilon)
@@ -97,7 +98,7 @@ class NADEBackgroundController(NDDController):
     @staticmethod
     # @profile
     def _BV_accelerate_challenge(v, r, rr):
-        """Assume the CAV is cutting in the BV and calculate by the BV CF
+        """Assume the CAV is cutting in the BV and calculate the challenge of the BV behavior.
 
         Args:
             v (float): Speed of BV.
@@ -120,14 +121,11 @@ class NADEBackgroundController(NDDController):
 
         Args:
             CAV (dict): Observation of the CAV.
-            SM_LC_prob (list(float)): List of possibility for the CAV from the surrogate model.
+            SM_LC_prob (list(float)): List of possibility for the CAV's lane-change probability from the surrogate model.
 
         Returns:
             float: Total criticality of the BV.
-            integer: BV action index.
-            float: Weight of the BV action.
-            float: Possibility of the BV action.
-            float: Criticality of the BV action.
+            list(float): Criticality of each BV action.
         """
         self.bv_criticality_array = np.zeros(len(conf.ACTIONS), dtype=float)
         bv_criticality, bv_action_idx, weight, ndd_possi, critical_possi, weight_list, criticality_array = - \
@@ -156,6 +154,7 @@ class NADEBackgroundController(NDDController):
             float: Weight of the BV action.
             float: Possibility of the BV action.
             float: Criticality of the BV action.
+            list(float): List of weight of each BV maneuver
         """
         if epsilon is None:
             epsilon = conf.epsilon_value

@@ -66,7 +66,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
         self.predicted_traj_obs = None
 
     def apply_control_permission(self):
-        """Check if the controlled BVs can be controlled.
+        """Check if the controlled BVs can be controlled. When the BV is in the lane change process, it cannot be controlled.
 
         Returns:
             bool: True if the controlled BVs can be controlled, False otherwise.
@@ -82,7 +82,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
 
     # @profile
     def project_position_from_ACM_to_straight_lane(self, vehicle):
-        """Project position from curved lane to straight lane.
+        """Project position from curved lanes to straight lanes.
 
         Args:
             vehicle (Vehicle): Vehicle instance of the studied vehicle.
@@ -145,7 +145,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
 
     # @profile
     def step(self, drl_action=None):
-        """Control the selected bvs from the bvs candidates to realize the decided behavior.
+        """Control the selected vehicle to realize the decided behavior.
 
         Args:
             drl_action (int, optional): The action index from the DRL agent. Defaults to None.
@@ -269,7 +269,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
             min_a (float): Minimal acceleration.
 
         Returns:
-            list: Upper bound and lower bound of the vehicle's reachability range.
+            tuple: Upper bound and lower bound of the vehicle's reachability range.
         """
         lower_bound_list = []
         upper_bound_list = []
@@ -284,7 +284,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
     @staticmethod
     # @profile
     def intersection_check(cav_reach_range_lb_list, cav_reach_range_ub_list, bv_reach_range_lb_list, bv_reach_range_ub_list):
-        """Return whether the two upper bounds and lower bounds have intersections.
+        """Return whether the reachability ranges for CAV and BV have intersections.
 
         Args:
             cav_reach_range_lb_list (list): List of lower bound of the CAV reachability range.
@@ -304,7 +304,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
 
     # @profile
     def get_bv_candidates(self):
-        """Find the BV candidates around the CAV for NADE safety test.
+        """Find the BV candidates around the CAV to take the challenging maneuvers.
 
         Returns:
             list(Vehicle): List of background vehicles around the CAV.
@@ -356,7 +356,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
             
         Returns:
             dict: Predicted observation of the vehicles.
-            dict: Trajectory observation of the vehicles.
+            dict: Trajectory of the vehicles.
         """
         predicted_obs = {}
         trajectory_obs = {}
@@ -386,7 +386,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
             controlled_bv_num (int): Number of controlled BVs.
             
         Returns:
-            list: List of the criticality of the BVs.
+            list: Processed criticality of the BVs.
         """
         for i in range(len(bv_criticality_list)):
             if bv_criticality_list[i] > 0:
@@ -398,7 +398,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
         return bv_criticality_list
     
     def collect_discriminator_input_simplified(self, full_obs, controlled_bvs_list, bv_criticality_list):
-        """Collect the input for the discriminator.
+        """Collect the input for the NADE agent.
 
         Args:
             full_obs (dict): Full observation of the vehicles.
@@ -406,7 +406,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
             bv_criticality_list (list): List of the criticality of the BVs.
 
         Returns:
-            np.array: Array of the input for the discriminator.
+            np.array: Array of the input for the NADE agent.
         """
         CAV_global_position = list(full_obs["CAV"]["position"])
         CAV_speed = full_obs["CAV"]["velocity"]
@@ -462,7 +462,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
         return np.float32(np.array(total_obs_for_DRL))
 
     def collect_discriminator_input_more_bvs(self, full_obs, controlled_bvs_list, bv_criticality_list): # 19 dimension observation
-        """Collect the input for the discriminator agent.
+        """Collect the input for the NADE agent.
         
         Args:
             full_obs (dict): Full observation of the vehicles.
@@ -470,7 +470,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
             bv_criticality_list (list): List of the criticality of the BVs.
 
         Returns:
-            np.array: Array of the input for the discriminator agent.
+            np.array: Array of the input for the NADE agent.
         """
         CAV_global_position = list(full_obs["CAV"]["position"])
         CAV_speed = full_obs["CAV"]["velocity"]
@@ -532,7 +532,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
         return np.array(total_obs_for_DRL)
 
     def _get_original_NADE_decision(self, controlled_bvs_list, CAV_obs, full_obs):
-        """Get the original NADE decision.
+        """Helper function to calculate the NADE decision.
 
         Args:
             controlled_bvs_list (list): List of controlled BVs.
@@ -560,10 +560,10 @@ class NADEBVGlobalController(NDDBVGlobalController):
 
     @property
     def original_NADE_decision(self):
-        """Get the original NADE decision.
+        """Get the NADE decision.
 
         Returns:
-            decision_information: Decision information of the NADE.
+            decision_information: Decision information of the NADE agent.
         """
         controlled_bvs_list = self.get_bv_candidates()
         controlled_bvs_ID_set = set([v.id for v in controlled_bvs_list])
@@ -576,14 +576,14 @@ class NADEBVGlobalController(NDDBVGlobalController):
         return self._recent_original_NADE_decision
 
     def get_underline_drl_action(self, discriminator_input, bv_criticality_list):
-        """Get the underline DRL action.
+        """Get the underline NADE agent action.
 
         Args:
-            discriminator_input (np.array): Array of the input for the discriminator.
+            discriminator_input (np.array): Array of the input for the NADE agent.
             bv_criticality_list (list): List of the criticality of the BVs.
 
         Returns:
-            float: The underline DRL action.
+            float: The underline NADE agent action.
         """
         underline_drl_action = None
         if sum(bv_criticality_list) > 0:
@@ -624,6 +624,9 @@ class NADEBVGlobalController(NDDBVGlobalController):
             list(float): List of behavior probability based on NDD.
             list(float): List of critical possibility.
             list(Vehicle): List of all studied vehicles.
+            list(float): List of vehicle criticality.
+            np.array: Array of the input for the NADE agent.
+            list(float): List of criticality of each vehicle.
         """
         num_controlled_critical_bvs = 2
         controlled_bvs_list = self.get_bv_candidates()
@@ -700,7 +703,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
     @staticmethod
     # @profile
     def _get_Surrogate_CAV_action_probability(cav_obs):
-        """Obtain the lane change probability of CAV. If ADS will not immediately crash, then the LC probability is at least epsilon_lane_change_prob map gain from [0, 1] to LC probability [epsilon_lane_change_prob, max_remaining_LC_prob].
+        """Obtain the lane change probability of CAV. If ADS will not immediately crash, then the lane change probability is at least epsilon_lane_change_prob map gain from [0, 1] to lane change probability [epsilon_lane_change_prob, max_remaining_LC_prob].
 
         Args:
             cav_obs (dict): Observation of the CAV.
@@ -762,11 +765,11 @@ class NADEBVGlobalController(NDDBVGlobalController):
     @staticmethod
     # @profile
     def _Mobil_surraget_model(cav_obs, lane_index):
-        """Apply the Mobil surrogate model for CAV Lane change to calculate the gain for this lane change maneuver. If it does not have safety issue, then return True, gain; otherwise False, None.
+        """Apply the Mobil surrogate model to calculate the gain for this lane change maneuver. If it does not have safety issue, then return True, gain; otherwise False, None.
 
         Args:
             cav_obs (dict): Observation of the CAV.
-            lane_index (integer): Candidate lane for the change.
+            lane_index (integer): Candidate lane for the lane change behavior.
 
         Returns:
             bool: Safety flag.
@@ -883,7 +886,7 @@ class NADEBVGlobalController(NDDBVGlobalController):
             bv_list (list): List of BVs.
 
         Returns:
-            dict: Full observation of the vehicles.
+            dict: Full observation of all the vehicles.
         """
         # This observation will be a dict containing CAV and all BV NADE candidates
         full_obs = collections.OrderedDict()

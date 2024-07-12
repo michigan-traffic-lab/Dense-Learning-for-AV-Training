@@ -9,6 +9,7 @@ from ray.tune.registry import register_env
 import os
 
 os.environ["mode"] = "training"
+os.environ["avtraining_yaml_path"] = "yaml_configs/training.yaml"
 import shutil
 from envs.gymenv import RL_NDE
 from envs.gymenv_offline import RL_NDE_offline
@@ -19,7 +20,7 @@ def env_creator(env_config):
     """Create an environment instance for RLLIB.
 
     Args:
-        env_config (Dict): configuration of the environment.
+        env_config (dict): Configuration of the environment.
 
     Returns:
         object: Environment instance.

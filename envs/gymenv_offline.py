@@ -27,7 +27,7 @@ class RL_NDE_offline(core.Env):
 
         Args:
             env_config (dict): Configuration of the environment.
-            train_flag (bool): Whether the environment is in training mode.
+            train_flag (bool): Whether the GYM environment is in training mode.
         """
         self.env = None
         self.simulator = None
@@ -269,7 +269,7 @@ class RL_NDE_offline(core.Env):
         """Helper function to reset the environment.
 
         Returns:
-            np.array: Initial observation.
+            np.array: Initial observation of the environment.
         """
         self.total_episode += 1
         # reset environment
@@ -319,7 +319,7 @@ class RL_NDE_offline(core.Env):
         """Main function to reset the environment.
 
         Returns:
-            np.array: Initial observation.
+            np.array: Initial observation of the environment.
         """
         # reset parameters
         self.init_wall_time = time.time()
@@ -654,7 +654,7 @@ class RL_NDE_offline(core.Env):
         return info
 
     def close(self):
-        """Close the environment.
+        """Close the environment. To be more specific, stop the simulator.
         """
         self.simulator.stop()
 
@@ -666,7 +666,7 @@ class RL_NDE_offline(core.Env):
         self.eval_index = 0
 
     def set_traj_pool(self, tmp_safe_id_list, tmp_safe_weight, tmp_crash_id_list, tmp_crash_weight, num_crash=0):
-        """Set the trajectory pool for different evaluation worker.
+        """Set the trajectory pool for different evaluation workers.
         """
         self.tmp_safe_id_list = tmp_safe_id_list
         self.tmp_safe_weight = tmp_safe_weight
@@ -675,7 +675,7 @@ class RL_NDE_offline(core.Env):
         self.num_crash = num_crash
 
     def load_offline_dataset(self):
-        """Load the offline dataset for the evaluation worker.
+        """Load the offline dataset for the evaluation workers.
 
         Returns:
             float: Time used for loading the offline dataset.

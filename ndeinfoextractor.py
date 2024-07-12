@@ -13,6 +13,11 @@ else:
 
 class NDEInfoExtractor(InfoExtractor):
     def __init__(self, env):
+        """Initialize the NDEInfoExtractor class.
+        
+        Args:
+            env (object): Environment instance.
+        """
         super().__init__(env)
         self.stop_info = {}
         self.episode_log = {}
@@ -27,8 +32,8 @@ class NDEInfoExtractor(InfoExtractor):
 
         Args:
             stop (bool): Whether the simulation is stopped.
-            reason (dict): Stop reason flag.
-            additional_info (dict): Collision vehicle ID.
+            reason (dict): Stop reason information.
+            additional_info (dict): Additional information, such as the collision vehicle ID.
         """
         if stop:
             self.save_dir = self.env.simulator.experiment_path
@@ -81,6 +86,9 @@ class NDEInfoExtractor(InfoExtractor):
     # @profile
     def get_snapshot_info(self, control_info=None):
         """Obtain the vehicle information at every time step.
+
+        Args:
+            control_info (dict): Control information of the vehicle. Default is None.
         """
         cav = self.env.vehicle_list["CAV"]
         cav_speed = cav.observation.information["Ego"]["velocity"]

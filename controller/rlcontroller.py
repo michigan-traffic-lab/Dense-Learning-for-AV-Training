@@ -33,7 +33,7 @@ class RLController(BaseController):
         self.state = None
 
     def install(self):
-        """Install vehicle controller and combine training agent.
+        """Install vehicle controller and combine the trained agent.
         """        
         super().install()
         self.vehicle.simulator.set_vehicle_color(self.vehicle.id, self.vehicle.color_red)
@@ -97,7 +97,7 @@ class RLController(BaseController):
             raise ValueError("Get BV action Indicator in CAV function")
 
     def lane_conflict_safety_check(self, observation, action_indicator_before):
-        """Check lane_conflict_safety safety.
+        """Check lane conflict situation.
 
         Args:
             action_indicator_before (list(bool)): List of old action indicator.
@@ -200,7 +200,7 @@ class RLControllerNew(BaseController):
         self._recent_cav_obs_space = None
 
     def install(self):
-        """Install vehicle controller and combine training agent.
+        """Install vehicle controller and initialize the vehicle status.
         """        
         super().install()
         self.vehicle.simulator.set_vehicle_color(self.vehicle.id, self.vehicle.color_red)
@@ -463,7 +463,7 @@ class RLControllerNew(BaseController):
             "highly_critical": False,
             "slightly_critical": False,
             "criticality": 0.0
-            }
+        }
         criticality = 0.0
         if conf.env_mode == "NADE":
             if self.vehicle.simulator.env.eval_flag:
@@ -497,14 +497,14 @@ class RLControllerNew(BaseController):
         return updated_critical
 
     def helper_solve_for_control_inputs(self, action, acc_dict):
-        """Solve for control inputs.
+        """Solve for control inputs given the target acceleration along the longitudinal and lateral directions.
 
         Args:
-            action (list): Action list.
-            acc_dict (dict): Acceleration dictionary.
+            action (list): Action list, containing the acceleration and steering angle.
+            acc_dict (dict): Target acceleration dictionary.
 
         Returns:
-            list: Solved control inputs.
+            list: Difference between the calculated acceleration and the target acceleration.
         """
         acc_x, acc_y = acc_dict["acc_x"], acc_dict["acc_y"]
         guess_action = {"acceleration": action[0], "steering_angle": action[1]}
@@ -567,14 +567,14 @@ class RLControllerNew(BaseController):
     @staticmethod
     # @profile
     def plain_process_information(ego_id, cav_context):
-        """Process the information of the CAV.
+        """Process the observation of the CAV.
 
         Args:
             ego_id (str): Ego vehicle ID.
             cav_context (dict): CAV context information.
 
         Returns:
-            dict: Processed information of the CAV.
+            dict: Processed observation of the CAV.
         """
         information = {}
         information["Ego"] = RLControllerNew.helper_plain_process_information(ego_id, ego_id, cav_context)
@@ -758,7 +758,7 @@ class RLControllerNew(BaseController):
             SM_LC_prob (list): Surrogate model lane change probability.
             full_obs (dict, optional): Full observation. Defaults to None.
             predicted_full_obs (dict, optional): Predicted full observation. Defaults to None.
-            predicted_traj_obs (dict, optional): Predicted trajectory observation. Defaults to None.
+            predicted_traj_obs (dict, optional): Predicted trajectory information. Defaults to None.
 
         Returns:
             float: BV criticality.
@@ -776,15 +776,15 @@ class RLControllerNew(BaseController):
     @staticmethod
     # @profile
     def helper_predict_new_cav_context(CAV_context, all_obs, prediction_time):
-        """Helper function to predict the new CAV context.
+        """Helper function to predict the CAV context information in the future.
 
         Args:
             CAV_context (dict): CAV context information.
             all_obs (dict): All observations.
-            prediction_time (float): Prediction time.
+            prediction_time (float): Prediction time horizon.
 
         Returns:
-            dict: New CAV context information.
+            dict: CAV context information in the future.
         """
         CAV_context_new = {}
         for veh_id in CAV_context.keys():
