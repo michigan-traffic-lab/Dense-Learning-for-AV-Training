@@ -1,6 +1,6 @@
 # Breaking through safety performance stagnation in autonomous vehicles with dense learning
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12735037.svg)](https://doi.org/10.5281/zenodo.12735037)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12735669.svg)](https://doi.org/10.5281/zenodo.12735669)
 
 ## Table of Contents:
 1. [Introduction of the Project](#introduction-of-the-project)
