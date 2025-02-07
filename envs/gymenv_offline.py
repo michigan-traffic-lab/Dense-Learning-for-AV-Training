@@ -379,6 +379,7 @@ class RL_NDE_offline(core.Env):
             reward = self._get_reward(done, reason)
             info = self._get_info()
         else:
+            early_stop = False
             while 1:
                 self.cav_speed_list.append(self.env.vehicle_list["CAV"].observation.information["Ego"]["velocity"])
                 self.cav_mean_speed = np.mean(self.cav_speed_list)
@@ -402,6 +403,9 @@ class RL_NDE_offline(core.Env):
                     else:
                         self.total_step += 1
                         self.simulator.step()
+                        if conf.experiment_config["ablation_study_config"] == "NRSMDP":
+                            early_stop = True
+                            break
                 else:
                     break
             if done:
@@ -410,6 +414,9 @@ class RL_NDE_offline(core.Env):
             # update for another time
             obs = self._get_observation()
             done, reason = self._get_done()
+            if early_stop:
+                done = True
+                reason = {9: "Replay ends"}
             reward = self._get_reward(done, reason)
             info = self._get_info()
         return obs, reward, done, info

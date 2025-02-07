@@ -466,7 +466,7 @@ class RLControllerNew(BaseController):
         }
         criticality = 0.0
         if conf.env_mode == "NADE":
-            if self.vehicle.simulator.env.eval_flag:
+            if self.vehicle.simulator.env.eval_flag or conf.experiment_config.get("ablation_study_config", None) == "NSLDD":
                 criticality = conf.precise_criticality_threshold
             else:
                 if not conf.simulation_config["neuralmetric_flag"]:

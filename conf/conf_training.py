@@ -1,4 +1,5 @@
 import json, ujson
+import math
 from .defaultconf import *
 from .conf_rlagent import *
 
@@ -62,11 +63,13 @@ simulation_config["pytorch_model_path_list"][0] = os.path.join(experiment_config
 simulation_config["pytorch_nade_model_path"] = os.path.join(experiment_config["code_root_folder"], simulation_config["pytorch_nade_model_path"])
 
 data_folder = experiment_config["data_folder"]
-data_info_origin_path = os.path.join(data_folder[0], "offline_av_alldata_new.json")
-data_info_new_path = os.path.join(data_folder[0], "offline_av_neweval_crashnearmiss_new.json")
+ablation_studu_name = "" if experiment_config["ablation_study_config"] == "None" else "_ablationstudy_"+experiment_config["ablation_study_config"]
+
+data_info_origin_path = os.path.join(data_folder[0], f"offline_av_alldata_new{ablation_studu_name}.json")
+data_info_new_path = os.path.join(data_folder[0], f"offline_av_neweval_crashnearmiss_new{ablation_studu_name}.json")
 data_info_origin = None
 data_folder_additional_info = None
-data_info_weight1_ratio = 0.5 # 5.139275315774029e-07/3.0313606351423044e-06
+data_info_weight1_ratio = 0.5 if experiment_config["ablation_study_config"] != "NRNDE" else 1.0
 if data_info_origin is None:
     if isinstance(data_info_origin_path, list) and len(data_info_origin_path) > 1:
         data_info_origin = []
@@ -81,5 +84,5 @@ if data_info_origin is None:
         data_info_origin["safe_ep_info"] = [tuple(info) for info in data_info_origin["safe_ep_info"]]
     # print("load data_info_origin")
 eval_round = ep_num_eval_worker = experiment_config["ep_num_eval_worker"]
-eval_three_circle_min_distance_threshold = experiment_config["eval_three_circle_min_distance_threshold"]
+eval_three_circle_min_distance_threshold = -math.inf if experiment_config["ablation_study_config"] in ["NNME", "NNME_NRDD"] else experiment_config["eval_three_circle_min_distance_threshold"]
 number_eval_workers = experiment_config["number_eval_workers"]

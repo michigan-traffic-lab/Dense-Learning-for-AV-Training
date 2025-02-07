@@ -31,6 +31,16 @@ simulation_config:
   speed_mode: "high_speed"
 
 experiment_config:
+  # configure the ablation study settings, please set this variable to be "None" if you don't want to do ablation study,
+  # otherwise, please set this variable to be one of the following:
+  # - "NEDD" represents "no episodic data densification", 
+  # - "NSLDD" represents "no state-level data densification", 
+  # - "NNME" represents "no near-miss episodes", 
+  # - "NRDD" represents "no retrospective data densification", 
+  # - "NNME_NRDD" represents no near-miss episodes and retrospective data densification", 
+  # - "NRNDE" represents "no trajectory resampling by probability of occurrence in NDE", 
+  # - "NRSMDP" represents "no reconnection of informative states in Markov process",
+  ablation_study_config: "None"
   AV_model: "RLNew"
   code_root_folder: "/absolute/path/to/Dense-Learning-for-AV-Training" # please set this variable to be the absolute path of the source code folder
   data_folder: 
